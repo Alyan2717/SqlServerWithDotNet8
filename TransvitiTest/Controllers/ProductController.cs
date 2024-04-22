@@ -17,13 +17,17 @@ namespace TransvitiTest.Controllers
             this.response = response;
         }
 
-        [HttpGet("GetAllProducts")]
-        public async Task<IActionResult> GetProducts(int page = 1, int pageSize = 10)
+        // --Postman HIT "https://localhost:7174/GetProducts"
+        [HttpGet("GetProducts")]
+        public async Task<IActionResult> GetProducts()
         {
+            int page = 1;
+            int pageSize = 10;
             var result = await response.GetProducts("https://fakestoreapi.com/products", page, pageSize);
             if(result.Count > 0)
             {
-                return Ok(result);
+                // return View(result); View Not Working
+                return Ok(new { products = result });
             }
             else
             {
@@ -31,11 +35,12 @@ namespace TransvitiTest.Controllers
             }
         }
 
+        // --Postman HIT "https://localhost:7174/GetSingleProduct"
         [HttpGet("GetSingleProduct")]
         public async Task<IActionResult> GetSingleProduct()
         {
             var result = await response.GetSingleProduct("https://fakestoreapi.com/products/1");
-            return Ok(result);
+            return Ok(new { product = result });
         }
     }
 }
