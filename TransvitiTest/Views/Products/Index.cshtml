@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Fake Products</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Title</td>
+                <td>@product.Price</td>
+                <td>@product.Category</td>
+                <td>@product.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
