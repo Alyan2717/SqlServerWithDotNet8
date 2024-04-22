@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text.Json;
 using TransvitiTest.Models;
 
@@ -51,7 +53,29 @@ namespace TransvitiTest.Service
             {
                 return new Products();
             }
+        }
 
+        public async Task<Products> PostProduct(string url, Products product)
+        {
+            var productJson = JsonSerializer.Serialize(product);
+            var httpContent = new StringContent(productJson, System.Text.Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(url, httpContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"Failed to retrieve products. Status code: {response.StatusCode}");
+            }
+
+            var contentStream = await response.Content.ReadAsStreamAsync();
+            var products = await JsonSerializer.DeserializeAsync<Products>(contentStream);
+            if (products != null)
+            {
+                return products;
+            }
+            else
+            {
+                return new Products();
+            }
         }
     }
 }

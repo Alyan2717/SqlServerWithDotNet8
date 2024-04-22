@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 using TransvitiTest.DBFolder;
+using TransvitiTest.Models;
 using TransvitiTest.Service;
 
 namespace TransvitiTest.Controllers
@@ -40,6 +41,20 @@ namespace TransvitiTest.Controllers
         public async Task<IActionResult> GetSingleProduct()
         {
             var result = await response.GetSingleProduct("https://fakestoreapi.com/products/1");
+            return Ok(new { product = result });
+        }
+
+        // --Postman HIT "https://localhost:7174/PostProduct"
+        //--JSON = {
+        //           "title": "test product",
+        //           "price": 13.5,
+        //           "category": "electronic",
+        //           "description": "lorem ipsum set"
+        //         }
+        [HttpPost("PostProduct")]
+        public async Task<IActionResult> PostProduct([FromBody] Products product)
+        {
+            var result = await response.PostProduct("https://fakestoreapi.com/products", product);
             return Ok(new { product = result });
         }
     }
